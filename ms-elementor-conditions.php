@@ -3,7 +3,7 @@
 * Plugin Name: MS Elementor Display Conditions
 * Description: This plugin allows to show/hide elementor elements based on conditional logic 
 * Plugin URI: https://plugins.magnificsoft.com/
-* Version: 0.1
+* Version: 1.0
 * Author: Mafnific Soft
 * Author URI: https://magnificsoft.com/
 * License: GPL 3.0
@@ -15,7 +15,7 @@ define('MSEC_PATH', plugin_dir_path(__FILE__));
 include(MSEC_PATH . 'inc/admin.php');
 
 
-// enqueue js
+// ENQUEUE JS
 add_action( 'wp_enqueue_scripts', function() {
 
    wp_enqueue_script('ms_element_conditions', plugins_url('assets/ms-element-conditions.js', __FILE__), array('jquery'));
@@ -65,9 +65,8 @@ function ms_element_conditions( $element, $args ) {
 					'institutional' => __('Institutional', 'ms-elementor-conditions'),
 					'financial' => __('Financial ', 'ms-elementor-conditions'),
 				],
-				'default' => [ '' ],
 			]
-		);
+      );
 
 	$element->end_controls_section();
 
@@ -75,19 +74,36 @@ function ms_element_conditions( $element, $args ) {
 
 
 // DO NOT RENDER ELEMENT
-add_filter( 'elementor/frontend/section/should_render', 'ms_elementor_hide_element', 10, 3);
-function ms_elementor_hide_element( $bool, $element ) {
+if(isset($_COOKIE['visitor_type'])) {
+   add_filter( 'elementor/frontend/section/should_render', 'ms_elementor_hide_element', 10, 3);
+   add_filter( 'elementor/frontend/column/should_render', 'ms_elementor_hide_element', 10, 3);
+   add_filter( 'elementor/frontend/widget/should_render', 'ms_elementor_hide_element', 10, 3);
+   function ms_elementor_hide_element( $bool, $element ) {
 
+      $visible = true;
 
+      $settings = $element->get_settings();
 
-   $settings = $element->get_settings();
-   if( 'test' === $settings['_element_id'] ) {
-       return false;
-   } else { 
-      return true;
+      if(isset($settings['ms_hide_element_for']) && is_array($settings['ms_hide_element_for'])) {
+
+         foreach($settings['ms_hide_element_for'] as $visitor) {
+            if($visitor == $_COOKIE['visitor_type']) {
+               $visible = false;
+            }
+         }
+
+      }
+
+      return $visible;
+      
    }
-
 }
 
-error_log( print_r($_COOKIE, true) );
 
+// PLUGIN UPDATES
+require 'plugin-update-checker/plugin-update-checker.php';
+$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+	'https://github.com/webdevs-pro/ms-elementor-conditions',
+	__FILE__,
+	'ms-elementor-conditions'
+);
