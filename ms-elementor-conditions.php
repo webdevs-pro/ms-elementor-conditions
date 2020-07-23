@@ -3,7 +3,7 @@
 * Plugin Name: MS Elementor Display Conditions
 * Description: This plugin allows to show/hide elementor elements based on conditional logic 
 * Plugin URI: https://plugins.magnificsoft.com/
-* Version: 1.0
+* Version: 1.1
 * Author: Mafnific Soft
 * Author URI: https://magnificsoft.com/
 * License: GPL 3.0

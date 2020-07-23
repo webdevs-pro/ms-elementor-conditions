@@ -6,27 +6,16 @@ jQuery(document).ready(function($) {
 
    $.each(selectors, function(key, selector) {
 
-   //    $(function() {
-   //       $(this).click(function() {
-   //          alert('boom4');
-   //          console.log(this);   
-   //       });
-   //   });
-
-   //    var selector = this;
-
-
       $('body').on('click touch', selector, function(e) {
-         // alert('private');
-         console.log(key);
-         createCookie("visitor_type", key, 365)
+         createCookie("visitor_type", key, 365);
+         setTimeout(function() {
+            location.reload();
+            return false;
+         }, 500);
+
       });
 
 
-      // $(selector).click(function(){
-      //    alert('boom3');
-      //    console.log(this);
-      // });
    });
 
 });
@@ -42,5 +31,5 @@ function createCookie(name,value,days) {
    else var expires = "";
    
    document.cookie = name + "=" + value + expires + "; path=/;";
-   v
+
 }
