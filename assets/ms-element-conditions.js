@@ -9,7 +9,7 @@ jQuery(document).ready(function($) {
       $('body').on('click touch', selector, function(e) {
          createCookie("visitor_type", key, 365);
          setTimeout(function() {
-            location.reload();
+            window.location.reload();
             return false;
          }, 500);
 
